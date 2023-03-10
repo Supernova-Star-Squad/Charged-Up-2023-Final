@@ -76,20 +76,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-
-    if (timer.get() < 5)
+    /* A simple timer implementation for Auto, Simply 
+     * add "Else If" Statements to create a set of operations during Auto
+     */
+    if (timer.get() < 3)
     {
-    driveSubsystem.teleopDrive(0, -0.5);
+    driveSubsystem.teleopDrive(1,0);
     }
-    else if (timer.get() < 2)
-    {
-      intakeSubsystem.forward();
-    }
-    else
-    {
-      driveSubsystem.teleopDrive(0, 0);
-      intakeSubsystem.stop();
-    }
+    
 
     
   }
