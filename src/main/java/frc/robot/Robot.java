@@ -26,9 +26,9 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Robot extends TimedRobot {
   public IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  public ClimberSubsystem climberSubsystem = new ClimberSubsystem();
   public static DriveSubsystem driveSubsystem = new DriveSubsystem();
   Timer timer;
+//public LiftController liftController = new LiftController();
 
   public XboxController xboxController;
   public Joystick logitech;
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
 
-    if (timer.get() < 1)
+    if (timer.get() < 5)
     {
     driveSubsystem.teleopDrive(0, -0.5);
     }
@@ -133,59 +133,25 @@ public class Robot extends TimedRobot {
     drive();
     
     // Intake System Buttons
-    if (xboxController.getAButton())
-      {
-            intakeSubsystem.forward();
+    if (xboxController.getAButton()){
+      intakeSubsystem.forward();
     }
-    else if(xboxController.getBButton()){
-            intakeSubsystem.back();
-    }
-    else{
-            intakeSubsystem.stop();
-    }
-
-    // Climber Subsystem Buttons
-
-    // Climber 1 controls
-// START XBOX ADDED FOR CLIMBERWINCH ************
-
-    if(xboxController.getXButton()){
-      climberSubsystem.forward();
-    }
-
-    else if(xboxController.getYButton()){
-      climberSubsystem.back();
-    }
-
-    else {
-      climberSubsystem.stop();
-    }
-
-// END xBOX ADDED FOR CLIMBERWINCH *************
-
-    if (logitech.getRawButton(12)){ //NB:This is technically incorrect, however it works the way intended.  
-      climberSubsystem.extend1();
-    }
-     else if (logitech.getRawButton(10)){  //NB:This is technically incorrect, however it works the way intended.
-      climberSubsystem.retract1();
-    }
-    else {
-        climberSubsystem.stop1();
-    }
-
-    // Climber 2 controls
-    if (logitech.getRawButton(9)){
-      climberSubsystem.extend2();
-    }
-    else if (logitech.getRawButton(11)){
-      climberSubsystem.retract2();
-    }
-    else  {
-      climberSubsystem.stop2();
+    else if (xboxController.getBButton()){
+      intakeSubsystem.back();
+    } else {
+      if (xboxController.getYButton()){
+        intakeSubsystem.up();
+      }
+      else if (xboxController.getXButton()){
+        intakeSubsystem.down();
+      }
+      else{
+        intakeSubsystem.stop();
+      }
     }
   }
-  /**
-   * This function is called once when the robot is disabled.
+  
+/* This function is called once when the robot is disabled.
    */
 
   @Override
