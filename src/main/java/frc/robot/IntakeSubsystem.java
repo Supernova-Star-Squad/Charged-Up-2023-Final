@@ -8,7 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
-
+// Intake subsystem - extend and lift motors control robot arm
 public class IntakeSubsystem {
   
   public VictorSP extendController;
