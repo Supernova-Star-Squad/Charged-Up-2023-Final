@@ -81,7 +81,11 @@ public class Robot extends TimedRobot {
      */
     if (timer.get() < 3)
     {
-    driveSubsystem.teleopDrive(1,0);
+    driveSubsystem.teleopDrive(0,1.5);
+    }
+    else if (timer.get()>3 && timer.get()< 4)
+    {
+      driveSubsystem.teleopDrive(1,0);
     }
     
 
