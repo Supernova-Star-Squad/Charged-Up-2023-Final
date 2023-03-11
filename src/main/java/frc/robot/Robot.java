@@ -9,8 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 // Imports //
 // wpilib imports //
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Robot extends TimedRobot {
   public IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   public static DriveSubsystem driveSubsystem = new DriveSubsystem();
+  DigitalInput limitSwitch = new DigitalInput(0);
   Timer timer;
 //public LiftController liftController = new LiftController();
 
@@ -38,6 +41,7 @@ public class Robot extends TimedRobot {
     CameraServer.startAutomaticCapture(1);
     logitech = new Joystick(RobotMap.joystickPort);
     xboxController = new XboxController(RobotMap.XboxControllerPort);
+    
 
     timer = new Timer();
   }
@@ -79,16 +83,19 @@ public class Robot extends TimedRobot {
     /* A simple timer implementation for Auto, Simply 
      * add "Else If" Statements to create a set of operations during Auto
      */
-    if (timer.get() < 3)
+    if (timer.get() < 0.5)
     {
-    driveSubsystem.teleopDrive(0,1.5);
+    driveSubsystem.teleopDrive(0,-1);
     }
-    else if (timer.get()>3 && timer.get()< 4)
+   /* else if (timer.get()>0.75 && timer.get()< 2)
     {
-      driveSubsystem.teleopDrive(1,0);
+      driveSubsystem.teleopDrive(0.33,1);
     }
-    
-
+    */
+    else if (timer.get()>4 && timer.get()<8.5)
+    {
+      driveSubsystem.teleopDrive(0,0.5);
+    }
     
   }
 
@@ -129,23 +136,20 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drive();
+
+    SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
     
     // Intake System Buttons
-    if (xboxController.getAButton()){
-      intakeSubsystem.forward();
-    }
-    else if (xboxController.getBButton()){
+    if (limitSwitch.get() && xboxController.getBButton()){ // Out
       intakeSubsystem.back();
+    } else if (xboxController.getAButton()){ // In
+      intakeSubsystem.forward();
+    } else if (xboxController.getYButton()){ // Up
+      intakeSubsystem.up();
+    } else if (xboxController.getXButton()){ // Down
+      intakeSubsystem.down();
     } else {
-      if (xboxController.getYButton()){
-        intakeSubsystem.up();
-      }
-      else if (xboxController.getXButton()){
-        intakeSubsystem.down();
-      }
-      else{
-        intakeSubsystem.stop();
-      }
+      intakeSubsystem.stop();
     }
   }
   
